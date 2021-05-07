@@ -37,18 +37,7 @@ class User {
 @Entity()
 @Filter({
   name: "userfilter",
-  cond: ({ search }, types) => ({
-    user: {
-      $or: [
-        {
-          firstName: search,
-        },
-        {
-          lastName: search,
-        },
-      ],
-    },
-  }),
+  cond: { user: { $or: [{ firstName: "name" }, { lastName: "name" }] } },
 })
 class Membership {
   constructor(user: User, role: string) {
@@ -98,7 +87,7 @@ describe("MikroORM filter + $or issue", () => {
       const [allMems, brokenCount] = await orm.em.findAndCount(
         Membership,
         { $or: [{ role: "admin" }, { role: "moderator" }] },
-        { filters: { userfilter: { search: "name" } } }
+        { filters: { userfilter: true } }
       );
       expect(brokenCount).to.be.equal(2);
     });
@@ -107,7 +96,7 @@ describe("MikroORM filter + $or issue", () => {
       const [filteredMems, correctCount] = await orm.em.findAndCount(
         Membership,
         { $and: [{ $or: [{ role: "admin" }, { role: "moderator" }] }] },
-        { filters: { userfilter: { search: "name" } } }
+        { filters: { userfilter: true } }
       );
       expect(correctCount).to.be.equal(1);
     });
