@@ -12,9 +12,14 @@ import {
 import { expect } from "chai";
 
 @Entity()
+@Filter({
+  name: "agefilter",
+  cond: { $or: [{ age: 18 }, { age: 21 }] },
+})
 class User {
-  constructor(name: string = "name") {
+  constructor(age: number, name: string = "name") {
     this.firstName = this.lastName = name;
+    this.age = age;
   }
   @PrimaryKey()
   public id!: number;
@@ -24,6 +29,9 @@ class User {
 
   @Property()
   public lastName!: string;
+
+  @Property()
+  public age: number;
 }
 
 @Entity()
@@ -75,10 +83,11 @@ describe("MikroORM filter + $or issue", () => {
     await orm.getSchemaGenerator().createDatabase(dbName);
     await orm.getSchemaGenerator().createSchema();
 
-    const user = new User();
+    const user = new User(18);
+    const user2 = new User(30);
     const basicMembership = new Membership(user, "basic");
     const adminMembership = new Membership(user, "admin");
-    orm.em.persist([user, basicMembership, adminMembership]);
+    orm.em.persist([user, user2, basicMembership, adminMembership]);
     await orm.em.flush();
   });
 
@@ -99,6 +108,24 @@ describe("MikroORM filter + $or issue", () => {
         Membership,
         { $and: [{ $or: [{ role: "admin" }, { role: "moderator" }] }] },
         { filters: { userfilter: { search: "name" } } }
+      );
+      expect(correctCount).to.be.equal(1);
+    });
+
+    it("Does not include age filter in query", async () => {
+      const [allUsers, brokenCount] = await orm.em.findAndCount(
+        User,
+        { $or: [{ firstName: "name" }, { lastName: "name" }] },
+        { filters: { agefilter: true } }
+      );
+      expect(brokenCount).to.be.equal(2);
+    });
+
+    it("Does include age filter in query", async () => {
+      const [filteredUsers, correctCount] = await orm.em.findAndCount(
+        User,
+        { $and: [{ $or: [{ firstName: "name" }, { lastName: "name" }] }] },
+        { filters: { agefilter: true } }
       );
       expect(correctCount).to.be.equal(1);
     });
