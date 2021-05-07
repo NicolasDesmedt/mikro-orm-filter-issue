@@ -1,0 +1,33 @@
+{
+  "name": "mikro-orm-filter-issue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tests/app.test.ts",
+  "type": "module",
+  "scripts": {
+    "test": "mocha -r ts-node/register 'tests/*.ts'"
+  },
+  "author": "",
+  "license": "ISC",
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./mikro-orm.config.ts",
+      "./dist/mikro-orm.config.js"
+    ]
+  },
+  "dependencies": {
+    "@mikro-orm/core": "^4.4.1",
+    "@mikro-orm/migrations": "^4.4.1",
+    "@mikro-orm/postgresql": "^4.5.4",
+    "@types/chai": "^4.2.17",
+    "@types/mocha": "^8.2.2",
+    "chai": "^4.3.4",
+    "mocha": "^8.4.0",
+    "ts-mocha": "^8.0.0"
+  },
+  "devDependencies": {
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  }
+}

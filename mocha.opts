@@ -1,0 +1,10 @@
+--require ts-node/register/transpile-only 
+--require tsconfig-paths/register
+--recursive
+--exit
+--timeout 999999
+--color
+--forbidPending
+--incremental
+--assumeChangesOnlyAffectDirectDependencies
+--tsBuildInfoFile .tsbuildinfo

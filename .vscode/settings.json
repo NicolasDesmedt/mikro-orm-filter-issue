@@ -1,0 +1,9 @@
+{
+  "mochaExplorer.env": { "NODE_ENV": "test" },
+  "mochaExplorer.files": "tests/*.test.ts",
+  "mochaExplorer.logpanel": true,
+  "testExplorer.mergeSuites": true,
+  "mochaExplorer.ui": "tdd",
+  "mochaExplorer.optsFile": "mocha.opts",
+  "mochaExplorer.debuggerConfig": "Debug Mocha Tests"
+}

@@ -1,0 +1,14 @@
+version: "3"
+services:
+  postgres:
+    container_name: mikro-orm-filter-issue
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - TZ=GMT
+      - PGTZ=GMT
+    volumes:
+      - ./data/postgres:/data/mikro-orm-filter-issue
+    env_file:
+      - docker.env
